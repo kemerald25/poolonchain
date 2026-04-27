@@ -29,6 +29,9 @@ export type CollisionEvent = {
   time: number;
   type: 'ball-ball' | 'ball-cushion' | 'ball-pocket' | 'state-transition';
   ballIds: number[];
+  data?: {
+    axis?: 'x' | 'y';
+  };
 };
 
 export type Keyframe = {

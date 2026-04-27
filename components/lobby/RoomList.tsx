@@ -45,7 +45,7 @@ export function RoomList() {
     fetchRooms();
 
     const channel = supabase.channel('public:rooms')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'rooms' }, payload => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rooms' }, _payload => {
           fetchRooms();
       })
       .subscribe();

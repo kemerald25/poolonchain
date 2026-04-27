@@ -21,7 +21,8 @@
     "xrpl": "^3.0.0",
     "xumm-sdk": "^1.9.0",
     "zod": "^3.23.8",
-    "socket.io-client": "^4.7.5"
+    "socket.io-client": "^4.7.5",
+    "socket.io": "^4.7.5"
   },
   "devDependencies": {
     "typescript": "^5",

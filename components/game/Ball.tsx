@@ -10,8 +10,6 @@ interface BallProps {
 }
 
 export const Ball = forwardRef<Mesh, BallProps>(({ data }, ref) => {
-  const isCueBall = data.id === 0;
-  
   // Basic colors per ball number (standard pool sets)
   const getBallColor = (id: number) => {
     if (id === 0) return '#ffffff'; // Cue ball

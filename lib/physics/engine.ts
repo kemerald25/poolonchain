@@ -16,7 +16,7 @@ export class PhysicsEngine {
     // 1. Initial State Setup based on cue ball impact
     this.applyCueStrike(input);
 
-    let keyframes: Keyframe[] = [];
+    const keyframes: Keyframe[] = [];
     let currentTime = 0;
     
     // Save initial frame
@@ -76,7 +76,7 @@ export class PhysicsEngine {
   private findNextEvent(): CollisionEvent | null {
     let minTime = Infinity;
     let nextEvent: CollisionEvent | null = null;
-    let eventData: any = null;
+    let eventData: { axis?: 'x' | 'y' } | null = null;
 
     // 1. Ball-Ball Collisions
     for (let i = 0; i < this.balls.length; i++) {
@@ -128,7 +128,7 @@ export class PhysicsEngine {
     }
 
     if (nextEvent) {
-        (nextEvent as any).data = eventData;
+      nextEvent.data = eventData || undefined;
     }
     return nextEvent;
   }
@@ -175,8 +175,8 @@ export class PhysicsEngine {
     } 
     else if (event.type === 'ball-cushion') {
         const b = this.balls.find(b => b.id === event.ballIds[0])!;
-        const axis = (event as any).data.axis;
-        resolveCushionCollision(b, axis);
+        const axis = event.data?.axis;
+        if (axis) resolveCushionCollision(b, axis);
     }
     else if (event.type === 'state-transition') {
         const b = this.balls.find(b => b.id === event.ballIds[0])!;

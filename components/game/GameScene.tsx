@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo, forwardRef } from 'react';
+import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows } from '@react-three/drei';
 import { Table } from './Table';
@@ -8,14 +8,6 @@ import { BallGroup } from './BallGroup';
 import { CueStick } from './CueStick';
 import { AimGuide } from './AimGuide';
 import { useGameStore } from '@/store/gameStore';
-import { Mesh } from 'three';
-
-export const Ball = forwardRef<Mesh, any>((props: any, ref: React.ForwardedRef<Mesh>) => {
-  const { data } = props;
-  const isCueBall = data.id === 0;
-  // ... rest of component
-  return null;
-});
 
 export function GameScene() {
   const balls = useGameStore(state => state.balls);

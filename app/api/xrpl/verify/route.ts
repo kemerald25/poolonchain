@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getXrplClient, getServerWallet } from '@/lib/xrpl/client';
+import { getXrplClient } from '@/lib/xrpl/client';
 import { env } from '@/lib/env';
 
 export async function POST(req: Request) {
   try {
-    const { txHash, matchId, playerRole } = await req.json();
+    const { txHash } = await req.json();
 
     if (!txHash) {
        return NextResponse.json({ error: "Missing txHash" }, { status: 400 });

@@ -21,7 +21,7 @@ export function timeToBallCollision(b1: BallData, b2: BallData): number | null {
     return null;
 }
 
-export function timeToCushionCollision(b: BallData): { time: number | null, axis: 'x' | 'y' | null } {
+export function timeToCushionCollision(b: BallData): { time: number | null, axis: 'x' | 'y' | undefined } {
     let tx = null;
     let ty = null;
 
@@ -47,7 +47,7 @@ export function timeToCushionCollision(b: BallData): { time: number | null, axis
         return { time: ty, axis: 'y' };
     }
 
-    return { time: null, axis: null };
+    return { time: null, axis: undefined };
 }
 
 export function resolveBallCollision(b1: BallData, b2: BallData) {

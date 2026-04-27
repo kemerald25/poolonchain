@@ -1,10 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
-import { useLoader } from '@react-three/fiber';
-import { TextureLoader } from 'three';
 import { PHYSICS } from '@/lib/constants';
-import * as THREE from 'three';
 
 export function Table() {
   // A placeholder felt color until textures are fully generated

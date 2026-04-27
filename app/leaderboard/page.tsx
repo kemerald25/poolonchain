@@ -3,7 +3,6 @@ import { CPBadge } from '@/components/profile/CPBadge';
 import Link from 'next/link';
 import { Database } from '@/types/supabase';
 
-type User = Database['public']['Tables']['users']['Row'];
 
 export default async function LeaderboardPage() {
   // Fetch top players sorted by cp_total. We'd use a server client in prod, 
