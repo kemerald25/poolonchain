@@ -13,7 +13,7 @@ export function GameScene() {
   const balls = useGameStore((state: GameStore) => state.balls);
   return (
     <div className="w-full h-full min-h-screen bg-pool-dark">
-      <Canvas shadows camera={{ position: [0, 2, 2], fov: 45 }}>
+      <Canvas shadows camera={{ position: [0, 4, 0], fov: 40 }}>
         {/* Environment & Lighting */}
         <color attach="background" args={['#0b0c10']} />
         
@@ -22,10 +22,10 @@ export function GameScene() {
         
         {/* Pool hall overhead lamp */}
         <spotLight 
-            position={[0, 3, 0]} 
+            position={[0, 4, 0]} 
             angle={1.2} 
             penumbra={1} 
-            intensity={1.5} 
+            intensity={2} 
             castShadow 
             shadow-mapSize={[2048, 2048]} 
         />
@@ -34,19 +34,19 @@ export function GameScene() {
         <Environment preset="night" />
 
         <Suspense fallback={null}>
-            <group position={[0, -0.5, 0]}> 
+            <group position={[0, 0, 0]}> 
                 <Table />
                 <BallGroup balls={balls} />
                 <CueStick />
                 <AimGuide />
                 
                 {/* Fake soft contact shadow under table geometry */}
-                <ContactShadows resolution={1024} position={[0, -0.15, 0]} opacity={0.6} scale={4} blur={2.5} far={1} />
+                <ContactShadows resolution={1024} position={[0, -0.1, 0]} opacity={0.6} scale={10} blur={2.5} far={1} />
             </group>
         </Suspense>
 
-        {/* User Camera Controls (temporary for debugging) */}
-        <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 2.1} minDistance={1} maxDistance={5} />
+        {/* Fixed Top-Down View (Disable Rotation) */}
+        <OrbitControls makeDefault enableRotate={false} minDistance={1} maxDistance={10} />
       </Canvas>
     </div>
   );

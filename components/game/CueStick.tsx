@@ -83,11 +83,11 @@ export function CueStick() {
   
   const posX = cueBall.position.x - Math.cos(aimAngle) * cueDistPull;
   const posZ = cueBall.position.y - Math.sin(aimAngle) * cueDistPull;
-  const posY = PHYSICS.BALL_RADIUS;
+  const posY = PHYSICS.BALL_RADIUS + 0.05;
 
   return (
-    <group position={[posX, posY, posZ]} rotation={[0, -aimAngle, Math.PI / 2]}>
-      {/* Wooden Cue Stick (rotated to point along X axis) */}
+    <group position={[posX, posY, posZ]} rotation={[0, -aimAngle, Math.PI / 2.05]}>
+      {/* Wooden Cue Stick (rotated to point along X axis, slightly tilted down) */}
       <mesh ref={meshRef} position={[-0.5, 0, 0]} castShadow> 
         <cylinderGeometry args={[0.015, 0.005, 1, 16]} />
         <meshStandardMaterial color="#8b5a2b" roughness={0.7} />
