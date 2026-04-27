@@ -8,7 +8,7 @@ export default async function ProfilePage({ params }: { params: { username: stri
   const { data: user } = await supabase
     .from('users')
     .select('*')
-    .or(`username.eq.${username},xrp_wallet_address.eq.${username}`)
+    .or(`username.eq.${username},id.eq.${username}`)
     .single();
 
   if (!user) {
@@ -23,7 +23,7 @@ export default async function ProfilePage({ params }: { params: { username: stri
   const { data: matches } = await supabase
     .from('matches')
     .select('*')
-    .or(`player_one_id.eq.${user.xrp_wallet_address},player_two_id.eq.${user.xrp_wallet_address}`)
+    .or(`player_one_id.eq.${user.id},player_two_id.eq.${user.id}`)
     .order('created_at', { ascending: false })
     .limit(10);
 
@@ -38,9 +38,9 @@ export default async function ProfilePage({ params }: { params: { username: stri
             
             <div className="flex flex-col items-center md:items-start flex-1">
                 <h1 className="text-3xl font-black text-white mb-2">{user.username || 'Anonymous Player'}</h1>
-                {user.xrp_wallet_address && (
+                {user.id && (
                     <div className="bg-pool-dark text-white/50 px-3 py-1 rounded-full text-xs font-mono mb-4">
-                        XRPL: {user.xrp_wallet_address}
+                        XRPL: {user.id}
                     </div>
                 )}
                 
@@ -52,7 +52,7 @@ export default async function ProfilePage({ params }: { params: { username: stri
             <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-wider">Recent Matches</h2>
             <div className="flex flex-col space-y-3">
                {matches?.map((match) => {
-                   const isWinner = match.winner_id === user.xrp_wallet_address;
+                   const isWinner = match.winner_id === user.id;
                    return (
                        <div key={match.id} className="flex items-center justify-between bg-white/5 rounded-xl p-4">
                            <div className="flex items-center space-x-4">

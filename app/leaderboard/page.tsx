@@ -8,7 +8,7 @@ export default async function LeaderboardPage() {
   // but for the sake of bypassing RLS, the generic client works here.
   const { data: players } = await supabase
     .from('users')
-    .select('username, cp_total, xrp_wallet_address')
+    .select('username, cp_total, id')
     .order('cp_total', { ascending: false })
     .limit(50);
 
@@ -28,11 +28,11 @@ export default async function LeaderboardPage() {
 
             <div className="flex flex-col space-y-2">
                {players?.map((p, idx) => (
-                   <Link href={`/profile/${p.username || p.xrp_wallet_address}`} key={idx}>
+                   <Link href={`/profile/${p.username || p.id}`} key={idx}>
                        <div className="flex items-center w-full bg-white/5 hover:bg-white/10 transition-colors rounded-xl px-4 py-3 cursor-pointer">
                            <div className="w-16 font-black text-xl text-white/40">#{idx + 1}</div>
                            <div className="flex-1 font-bold text-lg text-white">
-                               {p.username || `${p.xrp_wallet_address?.slice(0, 6)}...${p.xrp_wallet_address?.slice(-4)}`}
+                               {p.username || `${p.id?.slice(0, 6)}...${p.id?.slice(-4)}`}
                            </div>
                            <div className="w-32 flex justify-end">
                                <CPBadge amount={p.cp_total || 0} />
