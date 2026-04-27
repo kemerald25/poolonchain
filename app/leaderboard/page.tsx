@@ -1,7 +1,6 @@
 import { supabase } from '@/lib/supabase/client';
 import { CPBadge } from '@/components/profile/CPBadge';
 import Link from 'next/link';
-import { Database } from '@/types/supabase';
 
 
 export default async function LeaderboardPage() {

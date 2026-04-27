@@ -1,7 +1,7 @@
-import { useMemo, useRef, createRef, useEffect } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
-import { BallData, BallState, Keyframe } from '@/lib/physics/types';
+import { BallData, BallState } from '@/lib/physics/types';
 import { Ball } from './Ball';
 import { useGameStore } from '@/store/gameStore';
 

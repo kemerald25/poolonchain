@@ -1,5 +1,5 @@
 import { PhysicsResult } from '../physics/types';
-import { GameState, PlayerTurn, BallGroup } from './types';
+import { GameState } from './types';
 
 export function evaluateShot(
   currentState: GameState,

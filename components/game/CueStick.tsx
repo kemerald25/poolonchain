@@ -74,7 +74,7 @@ export function CueStick() {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [aimAngle, aimPower, isDragging, isPlaying, setAimAngle, setAimPower, simulateShot]);
+  }, [aimAngle, aimPower, isDragging, isPlaying, setAimAngle, setAimPower, simulateShot, broadcastShot, playSound]);
 
   if (!cueBall || isPlaying) return null;
 
