@@ -86,17 +86,24 @@ export function CueStick() {
   const posY = PHYSICS.BALL_RADIUS + 0.05;
 
   return (
-    <group position={[posX, posY, posZ]} rotation={[0, -aimAngle, Math.PI / 2.05]}>
-      {/* Wooden Cue Stick (rotated to point along X axis, slightly tilted down) */}
-      <mesh ref={meshRef} position={[-0.5, 0, 0]} castShadow> 
-        <cylinderGeometry args={[0.015, 0.005, 1, 16]} />
-        <meshStandardMaterial color="#8b5a2b" roughness={0.7} />
-      </mesh>
-      {/* Chalk tip */}
-      <mesh position={[0.005, 0, 0]}>
-        <cylinderGeometry args={[0.005, 0.005, 0.01, 16]} />
-        <meshStandardMaterial color="#4169E1" roughness={0.9} />
-      </mesh>
+    <group position={[cueBall.position.x, PHYSICS.BALL_RADIUS, cueBall.position.y]} rotation={[0, -aimAngle, 0]}>
+      {/* 
+          Inner group handles the pullback and tilt.
+          We move it back by cueDistPull and up slightly.
+      */}
+      <group position={[-cueDistPull, 0.05, 0]} rotation={[0, 0, -Math.PI / 16]}>
+          {/* Wooden Cue Stick */}
+          <mesh ref={meshRef} position={[-0.5, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow> 
+            <cylinderGeometry args={[0.015, 0.005, 1, 16]} />
+            <meshStandardMaterial color="#8b5a2b" roughness={0.7} />
+          </mesh>
+          
+          {/* Chalk tip */}
+          <mesh position={[0, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+            <cylinderGeometry args={[0.005, 0.005, 0.01, 16]} />
+            <meshStandardMaterial color="#4169E1" roughness={0.9} />
+          </mesh>
+      </group>
     </group>
   );
 }

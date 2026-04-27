@@ -22,14 +22,33 @@ export interface GameStore {
   endAnimation: () => void;
 }
 
+const createRack = () => {
+    const balls: BallData[] = [];
+    const r = PHYSICS.BALL_RADIUS;
+    const startX = PHYSICS.TABLE_LENGTH / 4;
+    const startY = 0;
+    
+    let count = 1;
+    // Standard 5-row triangle rack
+    for (let row = 0; row < 5; row++) {
+        for (let i = 0; i <= row; i++) {
+            balls.push({
+                id: count++,
+                position: { 
+                    x: startX + row * (r * 1.75), 
+                    y: startY + (i - row / 2) * (r * 2.1) 
+                },
+                velocity: { x: 0, y: 0 },
+                spin: { x: 0, y: 0 },
+                state: BallState.STATIONARY,
+            });
+        }
+    }
+    return balls;
+};
+
 const initialBalls: BallData[] = [
-  ...Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    position: { x: PHYSICS.TABLE_LENGTH / 4 - 0.5 + Math.random() * 0.1, y: -0.2 + Math.random() * 0.4 },
-    velocity: { x: 0, y: 0 },
-    spin: { x: 0, y: 0 },
-    state: BallState.STATIONARY,
-  })),
+  ...createRack(),
   { id: 0, position: { x: -PHYSICS.TABLE_LENGTH / 4, y: 0 }, velocity: { x: 0, y: 0 }, spin: { x: 0, y: 0 }, state: BallState.STATIONARY },
 ];
 
