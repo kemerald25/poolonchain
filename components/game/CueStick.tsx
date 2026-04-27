@@ -81,9 +81,6 @@ export function CueStick() {
   const cueDistBase = PHYSICS.BALL_RADIUS * 2;
   const cueDistPull = cueDistBase + aimPower * 0.5; // Visual pullback
   
-  const posX = cueBall.position.x - Math.cos(aimAngle) * cueDistPull;
-  const posZ = cueBall.position.y - Math.sin(aimAngle) * cueDistPull;
-  const posY = PHYSICS.BALL_RADIUS + 0.05;
 
   return (
     <group position={[cueBall.position.x, PHYSICS.BALL_RADIUS, cueBall.position.y]} rotation={[0, -aimAngle, 0]}>
