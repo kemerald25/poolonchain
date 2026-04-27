@@ -11,7 +11,7 @@ export function useAudio() {
     // Initialize AudioContext only after user interaction in modern browsers
     const initAudio = () => {
       if (!audioContext.current) {
-        audioContext.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        audioContext.current = new (window.AudioContext || (window as Window & typeof globalThis & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
         loadSounds();
       }
     };

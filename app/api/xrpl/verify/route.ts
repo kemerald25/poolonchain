@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     }
 
     // Capture delivered amount if available (XRP is usually in meta.delivered_amount)
-    const deliveredAmount = (meta as any).delivered_amount;
+    const deliveredAmount = (meta as { delivered_amount?: string | number | object }).delivered_amount;
 
     return NextResponse.json({ verified: true, deliveredAmount });
   } catch (error) {
