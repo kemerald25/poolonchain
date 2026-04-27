@@ -9,11 +9,11 @@ interface WalletState {
   setUserProfile: (username: string | null, cpTotal: number) => void;
 }
 
-export const useWalletStore = create<WalletState>((set) => ({
+export const useWalletStore = create<WalletState>()((set) => ({
   address: null,
   username: null,
   cpTotal: 0,
-  connect: (address) => set({ address }),
+  connect: (address: string) => set({ address }),
   disconnect: () => set({ address: null, username: null, cpTotal: 0 }),
-  setUserProfile: (username, cpTotal) => set({ username, cpTotal }),
+  setUserProfile: (username: string | null, cpTotal: number) => set({ username, cpTotal }),
 }));

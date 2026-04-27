@@ -1,14 +1,14 @@
 'use client';
 
-import { useGameStore } from '@/store/gameStore';
+import { useGameStore, GameStore } from '@/store/gameStore';
 import { Line } from '@react-three/drei';
 import { Vector3 } from 'three';
 import { PHYSICS } from '@/lib/constants';
 
 export function AimGuide() {
-  const balls = useGameStore(state => state.balls);
-  const aimAngle = useGameStore(state => state.aimAngle);
-  const aimPower = useGameStore(state => state.aimPower);
+  const balls = useGameStore((state: GameStore) => state.balls);
+  const aimAngle = useGameStore((state: GameStore) => state.aimAngle);
+  const aimPower = useGameStore((state: GameStore) => state.aimPower);
   
   const cueBall = balls.find(b => b.id === 0);
   

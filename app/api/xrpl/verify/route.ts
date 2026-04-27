@@ -23,18 +23,21 @@ export async function POST(req: Request) {
     });
 
     // Verify it is a successful Payment to our treasury wallet
+    const meta = tx.result.meta;
     if (
        tx.result.TransactionType !== 'Payment' ||
        tx.result.Destination !== env.TREASURY_WALLET_ADDRESS ||
-       tx.result.meta?.TransactionResult !== 'tesSUCCESS'
+       !meta ||
+       typeof meta === 'string' ||
+       meta.TransactionResult !== 'tesSUCCESS'
     ) {
         return NextResponse.json({ verified: false, reason: "Transaction invalid or failed" });
     }
 
-    // You would then update the database here marking `escrow_sequence_host` or `escrow_sequence_guest`
-    // with the validated txHash so the match can start.
+    // Capture delivered amount if available (XRP is usually in meta.delivered_amount)
+    const deliveredAmount = (meta as any).delivered_amount;
 
-    return NextResponse.json({ verified: true, deliveredAmount: tx.result.meta.delivered_amount });
+    return NextResponse.json({ verified: true, deliveredAmount });
   } catch (error) {
     console.error("XRPL Verify Error:", error);
     return NextResponse.json({ error: String(error) }, { status: 500 });

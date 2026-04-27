@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { Mesh } from 'three';
-import { useGameStore } from '@/store/gameStore';
+import { useGameStore, GameStore } from '@/store/gameStore';
 import { usePhysics } from '@/hooks/usePhysics';
 import { useMultiplayer } from '@/hooks/useMultiplayer';
 import { useAudio } from '@/hooks/useAudio';
@@ -11,12 +11,12 @@ import { useParams } from 'next/navigation';
 
 export function CueStick() {
   const meshRef = useRef<Mesh>(null);
-  const balls = useGameStore(state => state.balls);
-  const isPlaying = useGameStore(state => state.isPlaying);
-  const aimAngle = useGameStore(state => state.aimAngle);
-  const setAimAngle = useGameStore(state => state.setAimAngle);
-  const aimPower = useGameStore(state => state.aimPower);
-  const setAimPower = useGameStore(state => state.setAimPower);
+  const balls = useGameStore((state: GameStore) => state.balls);
+  const isPlaying = useGameStore((state: GameStore) => state.isPlaying);
+  const aimAngle = useGameStore((state: GameStore) => state.aimAngle);
+  const setAimAngle = useGameStore((state: GameStore) => state.setAimAngle);
+  const aimPower = useGameStore((state: GameStore) => state.aimPower);
+  const setAimPower = useGameStore((state: GameStore) => state.setAimPower);
   
   const { id: matchId } = useParams<{ id: string }>();
   const { simulateShot } = usePhysics();

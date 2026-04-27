@@ -7,10 +7,10 @@ import { Table } from './Table';
 import { BallGroup } from './BallGroup';
 import { CueStick } from './CueStick';
 import { AimGuide } from './AimGuide';
-import { useGameStore } from '@/store/gameStore';
+import { useGameStore, GameStore } from '@/store/gameStore';
 
 export function GameScene() {
-  const balls = useGameStore(state => state.balls);
+  const balls = useGameStore((state: GameStore) => state.balls);
   return (
     <div className="w-full h-full min-h-screen bg-pool-dark">
       <Canvas shadows camera={{ position: [0, 2, 2], fov: 45 }}>

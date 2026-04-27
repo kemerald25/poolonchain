@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { Mesh } from 'three';
 import { BallData, BallState } from '@/lib/physics/types';
 import { Ball } from './Ball';
-import { useGameStore } from '@/store/gameStore';
+import { useGameStore, GameStore } from '@/store/gameStore';
 
 interface BallGroupProps {
   balls: BallData[];
@@ -16,9 +16,9 @@ export function BallGroup({ balls }: BallGroupProps) {
   // Create refs for every possible ball (0-15)
   const ballRefs = useRef<(Mesh | null)[]>(new Array(16).fill(null));
 
-  const isPlaying = useGameStore(state => state.isPlaying);
-  const keyframes = useGameStore(state => state.keyframes);
-  const endAnimation = useGameStore(state => state.endAnimation);
+  const isPlaying = useGameStore((state: GameStore) => state.isPlaying);
+  const keyframes = useGameStore((state: GameStore) => state.keyframes);
+  const endAnimation = useGameStore((state: GameStore) => state.endAnimation);
 
   // Time tracker for playback
   const playbackTime = useRef(0);
