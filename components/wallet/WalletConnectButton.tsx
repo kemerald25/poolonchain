@@ -14,25 +14,53 @@ export function WalletConnectButton() {
   const handleConnect = async () => {
     setIsLoading(true);
     try {
-      // TODO: Connect via Xumm SDK payload. Mocking address for dev.
-      const mockAddress = 'rP9jD...MockXRPAddress'; 
+      // 1. Request Sign-In payload from our backend
+      const res = await fetch('/api/xaman/signin', { method: 'POST' });
+      const { uuid, next, error } = await res.json();
       
-      // Upsert user into Supabase
-      const { data, error } = await supabase
-        .from('users')
-        .upsert({ id: mockAddress }, { onConflict: 'id' })
-        .select()
-        .single();
-        
-      if (!error && data) {
-         connect(mockAddress);
-         setUserProfile(data.username, data.cp_total);
-      } else if (error) {
-         console.error("Failed to upsert user profile:", error);
-      }
-    } catch (err) {
+      if (error) throw new Error(error);
+
+      // 2. Open Xaman (next.always link)
+      // On mobile, this will deep-link into the Xaman app.
+      // On desktop, it opens a page with a QR code.
+      window.open(next, '_blank');
+
+      // 3. Poll for status
+      const pollInterval = setInterval(async () => {
+        try {
+          const statusRes = await fetch(`/api/xaman/status?uuid=${uuid}`);
+          const status = await statusRes.json();
+
+          if (status.signed && status.address) {
+            clearInterval(pollInterval);
+            
+            // 4. Upsert user into Supabase with the REAL address
+            const { data, error: upsertError } = await supabase
+              .from('users')
+              .upsert({ id: status.address }, { onConflict: 'id' })
+              .select()
+              .single();
+              
+            if (!upsertError && data) {
+               connect(status.address);
+               setUserProfile(data.username, data.cp_total);
+            } else if (upsertError) {
+               console.error("Failed to upsert user profile:", upsertError);
+            }
+            setIsLoading(false);
+          } else if (status.cancelled || status.expired) {
+            clearInterval(pollInterval);
+            setIsLoading(false);
+            console.log("Sign-in was cancelled or expired.");
+          }
+        } catch (pollErr) {
+          console.error("Polling error:", pollErr);
+        }
+      }, 2000); // Poll every 2 seconds
+
+    } catch (err: any) {
       console.error(err);
-    } finally {
+      alert("Connection failed: " + (err.message || "Unknown error"));
       setIsLoading(false);
     }
   };
