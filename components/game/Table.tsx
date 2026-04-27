@@ -60,6 +60,18 @@ export function Table() {
         <meshStandardMaterial color={feltColor} roughness={0.7} />
       </mesh>
 
+      {/* Pockets (Simple black circles for now) */}
+      {[
+        [-length/2, 0.001, -width/2], [length/2, 0.001, -width/2], // Corners
+        [-length/2, 0.001, width/2], [length/2, 0.001, width/2],   // Corners
+        [0, 0.001, -width/2 - 0.02], [0, 0.001, width/2 + 0.02]     // Sides
+      ].map((pos, idx) => (
+        <mesh key={idx} position={pos as [number, number, number]} rotation={[-Math.PI/2, 0, 0]}>
+          <circleGeometry args={[0.08, 32]} />
+          <meshBasicMaterial color="#000000" />
+        </mesh>
+      ))}
+
     </group>
   );
 }

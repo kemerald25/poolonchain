@@ -31,7 +31,8 @@ export function CueStick() {
     if (isPlaying) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setAimAngle(aimAngle + e.movementX * 0.01);
+      // Horizontal mouse move rotates the aim
+      setAimAngle(aimAngle + e.movementX * 0.005);
     };
 
     const handleMouseDown = () => setIsDragging(true);
@@ -40,18 +41,15 @@ export function CueStick() {
          setIsDragging(false);
          if (aimPower > 0.05) {
              const shotInput = {
-                angle: aimAngle,
+                angle: aimAngle, // Now synchronized correctly
                 power: aimPower * 10,
                 english: { x: 0, y: 0 }
              };
              
-             // Play strike sound with volume scaled by power
              playSound('cue_hit', Math.min(1, aimPower + 0.2));
              
-             // Running the pure math simulation through the Web Worker
              const keyframes = await simulateShot(shotInput);
              
-             // Broadcast the optimistic result to the opponent for immediate sync!
              if (keyframes && keyframes.length > 0) {
                  broadcastShot(shotInput, keyframes);
              }
@@ -61,8 +59,12 @@ export function CueStick() {
     };
     
     const handleDragMove = (e: MouseEvent) => {
+        // Vertical dragging (pulling back/pushing forward)
         const newPower = Math.min(1, Math.max(0, aimPower + e.movementY * 0.01));
         setAimPower(newPower);
+        
+        // Allow aiming slightly while dragging too
+        setAimAngle(aimAngle + e.movementX * 0.002);
     };
 
     window.addEventListener('mousemove', isDragging ? handleDragMove : handleMouseMove);
@@ -78,15 +80,14 @@ export function CueStick() {
 
   if (!cueBall || isPlaying) return null;
 
-  const cueDistBase = PHYSICS.BALL_RADIUS * 2;
-  const cueDistPull = cueDistBase + aimPower * 0.5; // Visual pullback
+  const cueDistBase = PHYSICS.BALL_RADIUS * 2.2;
+  const cueDistPull = cueDistBase + aimPower * 0.6; // Improved visual pullback
   
-
   return (
-    <group position={[cueBall.position.x, PHYSICS.BALL_RADIUS, cueBall.position.y]} rotation={[0, -aimAngle, 0]}>
+    <group position={[cueBall.position.x, PHYSICS.BALL_RADIUS, cueBall.position.y]} rotation={[0, aimAngle, 0]}>
       {/* 
           Inner group handles the pullback and tilt.
-          We move it back by cueDistPull and up slightly.
+          We move it back (Negative X) by cueDistPull and up slightly.
       */}
       <group position={[-cueDistPull, 0.05, 0]} rotation={[0, 0, -Math.PI / 16]}>
           {/* Wooden Cue Stick */}

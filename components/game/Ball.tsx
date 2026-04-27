@@ -30,22 +30,31 @@ export const Ball = forwardRef<Mesh, BallProps>(({ data }, ref) => {
 
   // We add half the sphere's radius to its y-position so it rests perfectly on the table (y=0)
   return (
-    <mesh
-      ref={ref}
-      castShadow
-      receiveShadow
-      position={[data.position.x, PHYSICS.BALL_RADIUS, data.position.y]}
-    >
-      <sphereGeometry args={[PHYSICS.BALL_RADIUS, 32, 32]} />
-      {/* Glossy standard pool ball material */}
-      <meshStandardMaterial 
-        color={getBallColor(data.id)} 
-        roughness={0.05} 
-        metalness={0.1}
-        envMapIntensity={1.0}
-      />
-    </mesh>
-  );
-});
+    <group position={[data.position.x, PHYSICS.BALL_RADIUS, data.position.y]}>
+      <mesh
+        ref={ref}
+        castShadow
+        receiveShadow
+      >
+        <sphereGeometry args={[PHYSICS.BALL_RADIUS, 32, 32]} />
+        <meshStandardMaterial 
+          color={getBallColor(data.id)} 
+          roughness={0.05} 
+          metalness={0.1}
+          envMapIntensity={1.0}
+        />
+      </mesh>
+      
+      {/* Visual Stripe for balls 9-15 */}
+      {data.id >= 9 && (
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[PHYSICS.BALL_RADIUS + 0.0001, 0.012, 16, 32]} />
+          <meshStandardMaterial color="#ffffff" roughness={0.1} />
+        </mesh>
+      )}
+      </group>
+    );
+  }
+);
 
 Ball.displayName = 'Ball';
