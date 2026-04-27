@@ -15,8 +15,8 @@ export interface GameStore {
   setBalls: (balls: BallData[]) => void;
   setKeyframes: (keyframes: Keyframe[]) => void;
   setCurrentFrameIndex: (idx: number) => void;
-  setAimAngle: (angle: number) => void;
-  setAimPower: (power: number) => void;
+  setAimAngle: (angle: number | ((prev: number) => number)) => void;
+  setAimPower: (power: number | ((prev: number) => number)) => void;
   setGameState: (state: Partial<GameState>) => void;
   setIsPlaying: (playing: boolean) => void;
   endAnimation: () => void;
@@ -75,8 +75,8 @@ export const useGameStore = create<GameStore>()((set) => ({
   setBalls: (balls) => set({ balls }),
   setKeyframes: (keyframes: Keyframe[]) => set({ keyframes, currentFrameIndex: 0, isPlaying: true }),
   setCurrentFrameIndex: (idx: number) => set({ currentFrameIndex: idx }),
-  setAimAngle: (aimAngle: number) => set({ aimAngle }),
-  setAimPower: (aimPower: number) => set({ aimPower }),
+  setAimAngle: (angle: number | ((prev: number) => number)) => set((s: GameStore) => ({ aimAngle: typeof angle === 'function' ? angle(s.aimAngle) : angle })),
+  setAimPower: (power: number | ((prev: number) => number)) => set((s: GameStore) => ({ aimPower: typeof power === 'function' ? power(s.aimPower) : power })),
   setGameState: (state: Partial<GameState>) => set((s: GameStore) => ({ gameState: { ...s.gameState, ...state } })),
   setIsPlaying: (isPlaying: boolean) => set({ isPlaying }),
   endAnimation: () => set((state: GameStore) => {

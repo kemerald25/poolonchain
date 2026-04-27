@@ -31,25 +31,31 @@ export function CueStick() {
     if (isPlaying) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Horizontal mouse move rotates the aim
-      setAimAngle(aimAngle + e.movementX * 0.005);
+      if (!isDragging) return;
+      // When dragging, we aim horizontally and power up vertically
+      setAimAngle((angle: number) => angle + e.movementX * 0.005);
+      
+      // Vertical drag pulls the cue back
+      setAimPower((power: number) => Math.min(1, Math.max(0, power + e.movementY * 0.01)));
     };
 
-    const handleMouseDown = () => setIsDragging(true);
+    const handleMouseDown = (e: MouseEvent) => {
+        // Only start dragging if left mouse clicked
+        if (e.button === 0) setIsDragging(true);
+    };
+
     const handleMouseUp = async () => {
       if (isDragging) {
          setIsDragging(false);
          if (aimPower > 0.05) {
              const shotInput = {
-                angle: aimAngle, // Now synchronized correctly
+                angle: aimAngle,
                 power: aimPower * 10,
                 english: { x: 0, y: 0 }
              };
              
              playSound('cue_hit', Math.min(1, aimPower + 0.2));
-             
              const keyframes = await simulateShot(shotInput);
-             
              if (keyframes && keyframes.length > 0) {
                  broadcastShot(shotInput, keyframes);
              }
@@ -58,21 +64,12 @@ export function CueStick() {
       }
     };
     
-    const handleDragMove = (e: MouseEvent) => {
-        // Vertical dragging (pulling back/pushing forward)
-        const newPower = Math.min(1, Math.max(0, aimPower + e.movementY * 0.01));
-        setAimPower(newPower);
-        
-        // Allow aiming slightly while dragging too
-        setAimAngle(aimAngle + e.movementX * 0.002);
-    };
-
-    window.addEventListener('mousemove', isDragging ? handleDragMove : handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', isDragging ? handleDragMove : handleMouseMove);
+      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };

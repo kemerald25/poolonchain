@@ -48,7 +48,7 @@ export const Ball = forwardRef<Mesh, BallProps>(({ data }, ref) => {
       {/* Visual Stripe for balls 9-15 */}
       {data.id >= 9 && (
         <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[PHYSICS.BALL_RADIUS + 0.0001, 0.012, 16, 32]} />
+          <torusGeometry args={[PHYSICS.BALL_RADIUS + 0.0001, 0.005, 16, 32]} />
           <meshStandardMaterial color="#ffffff" roughness={0.1} />
         </mesh>
       )}
