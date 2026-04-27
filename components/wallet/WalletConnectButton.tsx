@@ -58,9 +58,10 @@ export function WalletConnectButton() {
         }
       }, 2000); // Poll every 2 seconds
 
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      alert("Connection failed: " + (err.message || "Unknown error"));
+      const message = err instanceof Error ? err.message : "Unknown error";
+      alert("Connection failed: " + message);
       setIsLoading(false);
     }
   };
